@@ -1,4 +1,4 @@
-const {config , pool} = require('../../configuration/config');
+const {config } = require('../../configuration/config');
 const sql=require('mssql');
 module.exports={
     create:async (data,callback)=>{
@@ -20,11 +20,12 @@ module.exports={
     get: async callback=>{
         let pool=await sql.connect(config);
         let students=await pool.request()
+        .input('studentid',sql.Int,0)
         .execute('getstudents',(error,results)=>{
             if(error){
                 return callback(error);
             }
-            return callback(null,results);
+            return callback(null,results.recordsets[0]);
         });
     },
     getbyid: async (id,callback)=>{
@@ -35,7 +36,7 @@ module.exports={
             if(error){
                 return callback(error);
             }
-            return callback(null,results[0]);
+            return callback(null,results.recordset[0]);
         });
     },
     remove: async (id,callback)=>{
@@ -69,11 +70,11 @@ module.exports={
         let pool=await sql.connect(config);
         let students=await pool.request()
         .input('username',sql.VarChar,username)
-        .execute('getstudentsbyusername',(error,results,fields)=>{
+        .execute('getstudentsbyusername',(error,results)=>{
             if(error){
                 return callback(error);
             }
-            return callback(null,results[0]);
+            return callback(null,results);
         });
     }
 };

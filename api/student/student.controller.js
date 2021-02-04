@@ -48,13 +48,13 @@ module.exports={
                 console.log(error);
                 return res.status(500).json({
                     success:0,
-                    message:error.message,
+                    message:'no record found.',
                     data:null
                 })
             }
             return res.status(200).json({
                 success:1,
-                message: results,
+                message: '',
                 data:results
             })
         });
@@ -97,7 +97,7 @@ module.exports={
             });
         });
     },
-    getstudentbyusername:(req,res)=>{
+    login:(req,res)=>{
         const body=req.body;
         getbyusername(body.username,(error,results)=>{
             if(error){
@@ -110,12 +110,12 @@ module.exports={
             }
             if(!results){
                 return res.json({
-                    success:0,
+                     success:0,
                     message:'invalid email or password.'
                 });
             }
-
-            const result=compareSync(body.password,results.password);
+            
+            const result=compareSync(body.password,results.recordset[0].password);
             if(result){
                 result.password=undefined;
                 const jsontoken=sign({result:results},jsonkey,{
