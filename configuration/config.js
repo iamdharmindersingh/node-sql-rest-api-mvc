@@ -11,14 +11,7 @@ const config={
         enableArithAbort: true
     } 
 };
-const pool=sql.connect(config)
-.then(p=>{
-    console.log("Connected to SQL database.");
-    //console.log(p);
-    //return p
-})
-.catch(err=>console.log("Database connection error."));
-
+const jsonkey=process.env.JSON_KEY;
 module.exports={
-    config
+    config , jsonkey
 };
